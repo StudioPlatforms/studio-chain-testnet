@@ -1,143 +1,188 @@
 # Studio Chain Testnet Architecture
 
-This document describes the technical architecture of the Studio Chain Testnet node implementation.
-
 ## Overview
 
-Studio Chain Testnet is built on Geth (Go Ethereum) v1.13.14-stable with custom configurations optimized for testnet performance. It uses Proof of Authority (PoA) consensus with Clique protocol.
+Studio Chain Testnet is a custom blockchain network built on Geth (Go Ethereum) with specific optimizations for testnet performance. This document explains how our chain works and what makes it unique.
 
-## Core Components
+## Core Architecture
 
-### 1. Geth Implementation
-- Version: 1.13.14-stable
-- Base: Go Ethereum
-- Consensus: Clique PoA
+### 1. Base Implementation
+- Built on Geth v1.13.14-stable
+- Uses Proof of Authority (PoA) consensus
+- Custom-optimized for testnet performance
 
-### 2. Network Configuration
+### 2. Consensus Mechanism
+
+#### Proof of Authority (PoA)
+- Block time: 1 second
+- Validator set managed through Clique protocol
+- Epoch length: 30000 blocks
+- Single validator block signing
+- No competition for block production
+
+#### Validator Selection
+- Controlled validator set
+- Each validator has equal block production rights
+- Round-robin block production
+- No staking requirements
+
+### 3. Network Parameters
+
+#### Chain Configuration
+```json
+{
+  "chainId": 240240,
+  "homesteadBlock": 0,
+  "eip150Block": 0,
+  "eip155Block": 0,
+  "eip158Block": 0,
+  "byzantiumBlock": 0,
+  "constantinopleBlock": 0,
+  "petersburgBlock": 0,
+  "istanbulBlock": 0,
+  "berlinBlock": 0,
+  "clique": {
+    "period": 1,
+    "epoch": 30000
+  }
+}
 ```
-Chain ID: 240240
-Network ID: 240240
-Block Time: 1 second
-Gas Limit: 30000000
-```
 
-### 3. Node Architecture
+#### Performance Optimizations
+- Gas limit: 30000000
+- Zero gas price for testnet
+- Optimized transaction pool settings
+- Custom block time for faster finality
 
-```
-studio-chain-testnet/
-├── data/                  # Blockchain data (not in repo)
-│   ├── geth/             # Geth data directory
-│   └── keystore/         # Account keys
-├── config/               # Configuration files
-│   ├── genesis.json      # Chain genesis configuration
-│   ├── address.txt       # Validator address
-│   └── password.txt      # Account password
-└── scripts/              # Management scripts
-    ├── init.sh           # Chain initialization
-    └── start.sh          # Node startup
-```
+### 4. Network Topology
 
-### 4. API Endpoints
+#### Node Types
+1. Validator Nodes
+   - Run by approved validators
+   - Produce and validate blocks
+   - Full network participation
 
-#### JSON-RPC (8545)
-- Full Ethereum API support
-- Custom extensions for PoA
-- Transaction pool management
-- Debug interfaces
+2. Full Nodes
+   - Sync complete blockchain
+   - Verify all transactions
+   - Serve network requests
 
-#### WebSocket (8546)
-- Real-time event streaming
-- Subscription support
-- Block notifications
-- Transaction updates
+3. Light Nodes
+   - Sync block headers
+   - Verify specific transactions
+   - Minimal resource usage
 
-### 5. Performance Optimizations
+#### Network Communication
+- P2P protocol on port 30303
+- JSON-RPC API on port 8545
+- WebSocket API on port 8546
+
+### 5. Data Storage
+
+#### Blockchain Data
+- Full chain data in data/geth/chaindata
+- State trie in data/geth/state
+- Transaction receipts
+- Block headers and bodies
+
+#### Account Management
+- Keystore for validator accounts
+- Password-protected key files
+- Secure account import/export
+
+### 6. Transaction Processing
 
 #### Transaction Pool
-```
-Price Limit: 0
-Account Slots: 16
-Global Slots: 16384
-Account Queue: 64
-Global Queue: 1024
-```
+- Account slots: 16
+- Global slots: 16384
+- Account queue: 64
+- Global queue: 1024
+- Zero price limit for testnet
 
-#### Network Settings
-```
-P2P Port: 30303
-Discovery: Disabled
-Sync Mode: Full
-```
+#### Gas Management
+- Block gas limit: 30000000
+- Zero gas price allowed
+- No minimum gas price
+- Unlimited contract size
 
-## Security Architecture
+### 7. API Layer
 
-### 1. Account Management
-- Separate keystore directory
-- Password-protected accounts
-- Secure key import/export
+#### JSON-RPC API
+- Full Ethereum API compatibility
+- Custom extensions for PoA
+- Transaction management
+- Block production control
 
-### 2. Network Security
-- RPC/WS interface restrictions
-- CORS domain controls
-- Virtual host validation
+#### WebSocket API
+- Real-time event streaming
+- Block notifications
+- Transaction updates
+- Network status
 
-### 3. Consensus Security
-- PoA validator management
-- Block signing verification
-- Epoch-based validator rotation
+### 8. Security Architecture
 
-## Monitoring & Maintenance
+#### Network Security
+- Controlled validator set
+- Protected RPC endpoints
+- Secure WebSocket connections
+- Firewall recommendations
 
-### 1. Health Checks
-- Node synchronization status
-- Peer connectivity
+#### Validator Security
+- Secure key storage
+- Password protection
+- Account locking
+- Validator rotation
+
+### 9. Monitoring & Maintenance
+
+#### Health Monitoring
 - Block production rate
+- Peer connectivity
 - Transaction throughput
-
-### 2. Performance Metrics
-- Gas usage patterns
-- Block propagation times
-- Transaction pool status
 - Network latency
 
-### 3. Maintenance Procedures
-- Regular backups
-- Log rotation
+#### Maintenance Operations
 - Chain pruning
 - State cleanup
+- Log rotation
+- Backup procedures
 
 ## Integration Points
 
 ### 1. Indexer Integration
-- Block data streaming
+The chain is designed to work seamlessly with our custom indexer:
+- Real-time block streaming
 - Transaction indexing
 - Contract verification
 - Event logging
 
-### 2. External Services
-- RPC endpoint exposure
-- WebSocket subscriptions
-- Chain data access
-- Contract interaction
+### 2. External Tools
+Compatible with standard Ethereum tools:
+- Web3.js
+- Ethers.js
+- Truffle
+- Hardhat
 
 ## Future Enhancements
 
-1. State Pruning
-- Implement state trie pruning
-- Optimize storage usage
-- Reduce chain size
+### 1. Performance Optimizations
+- State trie pruning
+- Transaction pool optimization
+- Block propagation improvements
+- Database optimization
 
-2. Performance Optimization
-- Fine-tune transaction pool
-- Optimize block propagation
-- Enhance peer discovery
-
-3. Monitoring Improvements
-- Advanced metrics collection
+### 2. Feature Additions
+- Enhanced monitoring
+- Automated backups
+- Advanced security features
 - Performance analytics
-- Automated health checks
 
-4. Security Enhancements
-- Advanced access controls
-- Enhanced key management
-- Automated security audits
+### 3. Tool Integration
+- Block explorer
+- Network monitor
+- Analytics dashboard
+- Development tools
+
+## Conclusion
+
+Studio Chain Testnet provides a robust, optimized blockchain environment based on Geth, with specific enhancements for testnet operations. The architecture balances performance, security, and usability while maintaining compatibility with the Ethereum ecosystem.

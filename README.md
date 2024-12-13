@@ -1,67 +1,65 @@
 # Studio Chain Testnet Node
 
-A Geth-based implementation of Studio Chain Testnet with custom configurations for optimal performance.
+This repository provides the configuration and setup files for running a validator node on Studio Chain Testnet. Our chain is based on Geth with custom configurations for optimal testnet performance.
 
-## Repository Structure
+## What This Repository Provides
 
-```
-.
-├── config/                 # Configuration templates
-│   ├── genesis.json.example    # Genesis block configuration
-│   ├── address.txt.example     # Validator address template
-│   └── password.txt.example    # Account password template
-│
-├── scripts/               # Management scripts
-│   ├── init.sh               # Chain initialization script
-│   └── start.sh              # Node startup script
-│
-├── docs/                  # Documentation
-│   ├── ARCHITECTURE.md       # Technical architecture details
-│   └── INSTALL.md           # Installation guide
-│
-├── LICENSE               # MIT License
-└── README.md            # This file
-```
+1. **Chain Configuration**
+   - Genesis block configuration template
+   - Network parameters (Chain ID, gas limits, etc.)
+   - PoA consensus settings
 
-## Quick Start
+2. **Validator Setup**
+   - Scripts to initialize and run a validator node
+   - Templates for validator account configuration
+   - Network connection settings
 
-1. Install Geth v1.13.14-stable:
-```bash
-sudo add-apt-repository -y ppa:ethereum/ethereum
-sudo apt-get update
-sudo apt-get install -y ethereum
-```
+3. **Documentation**
+   - Step-by-step setup instructions
+   - Technical architecture details
+   - Security guidelines
 
-2. Clone the repository:
-```bash
-git clone https://github.com/StudioPlatforms/studio-chain-testnet.git
-cd studio-chain-testnet
-```
+## Becoming a Validator
 
-3. Set up configuration:
-```bash
-# Create config files from templates
-cp config/genesis.json.example genesis.json
-cp config/address.txt.example address.txt
-cp config/password.txt.example password.txt
+To become a validator on Studio Chain Testnet:
 
-# Edit with your settings
-nano genesis.json    # Update genesis configuration
-nano address.txt     # Add validator address
-nano password.txt    # Set secure password
-```
+1. **Prerequisites**
+   - Install Go Ethereum (geth) v1.13.14-stable
+   ```bash
+   sudo add-apt-repository -y ppa:ethereum/ethereum
+   sudo apt-get update
+   sudo apt-get install -y ethereum
+   ```
 
-4. Initialize and start the node:
-```bash
-# Make scripts executable
-chmod +x scripts/init.sh scripts/start.sh
+2. **Setup Process**
+   ```bash
+   # Clone this repository
+   git clone https://github.com/StudioPlatforms/studio-chain-testnet.git
+   cd studio-chain-testnet
 
-# Initialize chain
-./scripts/init.sh
+   # Create validator account
+   geth account new --datadir data
 
-# Start node
-./scripts/start.sh
-```
+   # Copy and edit configuration files
+   cp config/genesis.json.example genesis.json
+   cp config/address.txt.example address.txt
+   cp config/password.txt.example password.txt
+
+   # Add your validator address to address.txt
+   # Set your account password in password.txt
+   # Update genesis.json with your validator address
+
+   # Initialize and start node
+   chmod +x scripts/init.sh scripts/start.sh
+   ./scripts/init.sh
+   ./scripts/start.sh
+   ```
+
+3. **Validator Requirements**
+   - Minimum 4GB RAM (8GB recommended)
+   - 50GB disk space
+   - Stable internet connection
+   - 24/7 operation capability
 
 ## Network Details
 
@@ -71,33 +69,69 @@ chmod +x scripts/init.sh scripts/start.sh
 - Block Time: 1 second
 - Gas Limit: 30000000
 
-## Documentation
+## Validator Responsibilities
 
-- [Installation Guide](docs/INSTALL.md) - Detailed setup instructions
-- [Architecture](docs/ARCHITECTURE.md) - Technical architecture and design
+As a validator, you will:
+1. Produce and validate blocks
+2. Maintain network security
+3. Process transactions
+4. Keep your node operational 24/7
 
-## Features
+## Security Requirements
 
-- Based on Geth v1.13.14-stable
-- Proof of Authority (PoA) consensus
-- Optimized transaction pool settings
-- Full JSON-RPC and WebSocket API support
-- Custom gas and mining configurations
-- Comprehensive monitoring capabilities
+Validators must:
+1. Secure their private keys
+2. Use strong passwords
+3. Configure firewalls properly
+4. Keep their nodes updated
+5. Monitor node performance
 
-## Requirements
+## Monitoring Your Node
 
-- Ubuntu 20.04 or later
-- Go 1.21.6 or later
-- 4GB RAM minimum (8GB recommended)
-- 50GB disk space minimum
+Monitor your validator status:
+```bash
+# Attach to your node
+geth attach data/geth.ipc
 
-## Security Notes
+# Check if you're validating
+> clique.getSigners()
 
-- Never commit sensitive files (genesis.json, address.txt, password.txt)
-- Keep your validator private key secure
-- Use strong passwords for validator accounts
-- Configure firewalls to protect RPC/WS ports
+# Check your node's status
+> eth.mining
+> eth.blockNumber
+```
+
+## Troubleshooting
+
+Common issues and solutions:
+
+1. Node not syncing
+```bash
+# Check sync status
+geth attach data/geth.ipc --exec 'eth.syncing'
+
+# Check peers
+geth attach data/geth.ipc --exec 'admin.peers.length'
+```
+
+2. Not validating blocks
+```bash
+# Verify your address is in the validators list
+geth attach data/geth.ipc --exec 'clique.getSigners()'
+
+# Check if your node is mining
+geth attach data/geth.ipc --exec 'eth.mining'
+```
+
+## Support
+
+For validator support:
+1. Check the [Installation Guide](docs/INSTALL.md)
+2. Review [Architecture](docs/ARCHITECTURE.md)
+3. Open an issue with:
+   - Node logs
+   - Configuration details
+   - Error messages
 
 ## Contributing
 
@@ -110,7 +144,3 @@ chmod +x scripts/init.sh scripts/start.sh
 ## License
 
 MIT License - see LICENSE file for details
-
-## Support
-
-For questions and support, please open an issue in the GitHub repository.
