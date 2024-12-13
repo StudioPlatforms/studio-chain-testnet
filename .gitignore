@@ -1,6 +1,12 @@
 # Geth data directory
 data/
-geth/data/
+geth/
+node/geth/
+
+# Sensitive files
+password.txt
+address.txt
+genesis.json
 
 # Node specific
 geth.ipc
