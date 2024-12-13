@@ -1,17 +1,39 @@
-# Geth data directory
+# Geth data directories
 data/
 geth/
 node/geth/
+src/ancient/
 
-# Sensitive files
-password.txt
-address.txt
-genesis.json
+# Blockchain data
+*.ldb
+*.log
+chaindata/
+lightchaindata/
+nodes/
+blobpool/
 
 # Node specific
 geth.ipc
 nodekey
 history
+LOCK
+MANIFEST*
+OPTIONS*
+CURRENT*
+*.sst
+*.cdat
+*.cidx
+*.rdat
+*.ridx
+*.meta
+
+# Sensitive files
+password.txt
+address.txt
+genesis.json
+private.key
+keystore/
+*.key
 
 # Logs
 logs/
