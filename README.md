@@ -1,41 +1,41 @@
 # Studio Chain Testnet Node
 
-This repository contains the Ethereum-based node implementation for Studio Chain Testnet, a custom blockchain network optimized for performance and scalability.
+This repository contains the configuration and setup files for running a Studio Chain Testnet node. The node is based on Geth with custom configurations for optimal performance.
 
-## Features
+## Network Details
 
-- Custom-optimized Ethereum fork
-- Proof of Authority (PoA) consensus mechanism
-- Optimized gas costs and block time
-- Full Ethereum compatibility
-- JSON-RPC API support
+- Chain ID: 240240
+- RPC URL: https://rpc.studio-blockchain.com
+- WebSocket URL: wss://ws.studio-blockchain.com
+- Network ID: 240240
 
 ## Required Files
 
-The following files are required but not included in the repository for security reasons. Contact the project maintainers to obtain these files:
+The following files are required but not included in the repository for security reasons. Example templates are provided:
 
-### genesis.json
-The genesis file containing the initial state and parameters of the blockchain:
-- Initial validators
-- Chain configuration
-- Network parameters
-- Initial account balances
+1. `genesis.json` - Chain genesis configuration
+   - See `genesis.json.example` for the structure
+   - Contains initial chain configuration and validator setup
 
-### password.txt
-Contains the password for the validator account. Format:
-```
-your-secure-password
-```
+2. `address.txt` - Validator address
+   - See `address.txt.example` for the format
+   - Contains the Ethereum address of the validator
 
-### address.txt
-Contains the validator's Ethereum address. Format:
-```
-0xyour-validator-address
-```
+3. `password.txt` - Validator account password
+   - See `password.txt.example` for the format
+   - Used to secure the validator account
 
-### Scripts
-- `init.sh`: Initializes the blockchain with the genesis file
-- `start.sh`: Starts the node with the correct parameters
+## Setup Scripts
+
+1. `init.sh` - Initializes the blockchain
+   - Creates required directories
+   - Sets up validator account
+   - Initializes genesis block
+
+2. `start.sh` - Starts the node with proper configuration
+   - Configures RPC and WebSocket endpoints
+   - Sets up mining and validator settings
+   - Configures transaction pool
 
 ## Requirements
 
@@ -43,7 +43,7 @@ Contains the validator's Ethereum address. Format:
 - 4GB RAM minimum (8GB recommended)
 - 50GB disk space minimum
 
-## Setup
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -51,47 +51,45 @@ git clone https://github.com/StudioPlatforms/studio-chain-testnet.git
 cd studio-chain-testnet
 ```
 
-2. Obtain the required files (genesis.json, password.txt, address.txt) from project maintainers
+2. Create required files from examples:
+```bash
+cp genesis.json.example genesis.json    # Then edit with your settings
+cp address.txt.example address.txt      # Add your validator address
+cp password.txt.example password.txt    # Set your secure password
+```
 
-3. Place the files in the root directory
-
-4. Make scripts executable:
+3. Make scripts executable:
 ```bash
 chmod +x init.sh start.sh
 ```
 
-5. Initialize the node:
+4. Initialize the blockchain:
 ```bash
 ./init.sh
 ```
 
-6. Start the node:
+5. Start the node:
 ```bash
 ./start.sh
 ```
 
-## Network Details
+## Node Configuration
 
-- RPC URL: https://rpc.studio-blockchain.com
-- WebSocket URL: wss://ws.studio-blockchain.com
-- Chain ID: [Your Chain ID]
+The node is configured with the following settings:
 
-## Development
+- HTTP RPC enabled on port 8545
+- WebSocket enabled on port 8546
+- Full transaction APIs enabled
+- Custom gas and transaction pool settings
+- Proof of Authority consensus
+- Optimized for performance
 
-### Running a Development Node
-```bash
-# Start a development node
-geth --dev --datadir ./data
+## Security Notes
 
-# Attach to running node
-geth attach ./data/geth.ipc
-```
-
-### Testing
-```bash
-# Run test suite
-go test ./...
-```
+- Never commit sensitive files (genesis.json, address.txt, password.txt)
+- Keep your validator private key secure
+- Use strong passwords for validator accounts
+- Configure firewalls to protect RPC/WS ports
 
 ## Contributing
 
@@ -100,14 +98,6 @@ go test ./...
 3. Commit your changes
 4. Push to the branch
 5. Create a new Pull Request
-
-## Security
-
-The following files contain sensitive information and should never be committed to the repository:
-- genesis.json
-- password.txt
-- address.txt
-- geth/ directory (contains blockchain data)
 
 ## License
 
