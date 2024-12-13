@@ -1,88 +1,96 @@
 # Studio Chain Testnet Node
 
-This repository contains the configuration and setup files for running a Studio Chain Testnet node. The node is based on Geth with custom configurations for optimal performance.
+A Geth-based implementation of Studio Chain Testnet with custom configurations for optimal performance.
+
+## Repository Structure
+
+```
+.
+├── config/                 # Configuration templates
+│   ├── genesis.json.example    # Genesis block configuration
+│   ├── address.txt.example     # Validator address template
+│   └── password.txt.example    # Account password template
+│
+├── scripts/               # Management scripts
+│   ├── init.sh               # Chain initialization script
+│   └── start.sh              # Node startup script
+│
+├── docs/                  # Documentation
+│   ├── ARCHITECTURE.md       # Technical architecture details
+│   └── INSTALL.md           # Installation guide
+│
+├── LICENSE               # MIT License
+└── README.md            # This file
+```
+
+## Quick Start
+
+1. Install Geth v1.13.14-stable:
+```bash
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install -y ethereum
+```
+
+2. Clone the repository:
+```bash
+git clone https://github.com/StudioPlatforms/studio-chain-testnet.git
+cd studio-chain-testnet
+```
+
+3. Set up configuration:
+```bash
+# Create config files from templates
+cp config/genesis.json.example genesis.json
+cp config/address.txt.example address.txt
+cp config/password.txt.example password.txt
+
+# Edit with your settings
+nano genesis.json    # Update genesis configuration
+nano address.txt     # Add validator address
+nano password.txt    # Set secure password
+```
+
+4. Initialize and start the node:
+```bash
+# Make scripts executable
+chmod +x scripts/init.sh scripts/start.sh
+
+# Initialize chain
+./scripts/init.sh
+
+# Start node
+./scripts/start.sh
+```
 
 ## Network Details
 
 - Chain ID: 240240
 - RPC URL: https://rpc.studio-blockchain.com
 - WebSocket URL: wss://ws.studio-blockchain.com
-- Network ID: 240240
+- Block Time: 1 second
+- Gas Limit: 30000000
 
-## Required Files
+## Documentation
 
-The following files are required but not included in the repository for security reasons. Example templates are provided:
+- [Installation Guide](docs/INSTALL.md) - Detailed setup instructions
+- [Architecture](docs/ARCHITECTURE.md) - Technical architecture and design
 
-1. `genesis.json` - Chain genesis configuration
-   - See `genesis.json.example` for the structure
-   - Contains initial chain configuration and validator setup
+## Features
 
-2. `address.txt` - Validator address
-   - See `address.txt.example` for the format
-   - Contains the Ethereum address of the validator
-
-3. `password.txt` - Validator account password
-   - See `password.txt.example` for the format
-   - Used to secure the validator account
-
-## Setup Scripts
-
-1. `init.sh` - Initializes the blockchain
-   - Creates required directories
-   - Sets up validator account
-   - Initializes genesis block
-
-2. `start.sh` - Starts the node with proper configuration
-   - Configures RPC and WebSocket endpoints
-   - Sets up mining and validator settings
-   - Configures transaction pool
+- Based on Geth v1.13.14-stable
+- Proof of Authority (PoA) consensus
+- Optimized transaction pool settings
+- Full JSON-RPC and WebSocket API support
+- Custom gas and mining configurations
+- Comprehensive monitoring capabilities
 
 ## Requirements
 
-- Go 1.19 or later
+- Ubuntu 20.04 or later
+- Go 1.21.6 or later
 - 4GB RAM minimum (8GB recommended)
 - 50GB disk space minimum
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/StudioPlatforms/studio-chain-testnet.git
-cd studio-chain-testnet
-```
-
-2. Create required files from examples:
-```bash
-cp genesis.json.example genesis.json    # Then edit with your settings
-cp address.txt.example address.txt      # Add your validator address
-cp password.txt.example password.txt    # Set your secure password
-```
-
-3. Make scripts executable:
-```bash
-chmod +x init.sh start.sh
-```
-
-4. Initialize the blockchain:
-```bash
-./init.sh
-```
-
-5. Start the node:
-```bash
-./start.sh
-```
-
-## Node Configuration
-
-The node is configured with the following settings:
-
-- HTTP RPC enabled on port 8545
-- WebSocket enabled on port 8546
-- Full transaction APIs enabled
-- Custom gas and transaction pool settings
-- Proof of Authority consensus
-- Optimized for performance
 
 ## Security Notes
 
@@ -103,6 +111,6 @@ The node is configured with the following settings:
 
 MIT License - see LICENSE file for details
 
-## Contact
+## Support
 
 For questions and support, please open an issue in the GitHub repository.
